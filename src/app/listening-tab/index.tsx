@@ -142,7 +142,7 @@ const ConnectSection: React.FC<Props> = (props) => {
       </div>
       <div className={classes.events}>
         {eventDataList.map((item) => (
-          <div className={classes.listeningItemWrapper}>
+          <div key={item.name} className={classes.listeningItemWrapper}>
             <ListeningItem key={item.name} eventData={item} onRemove={onRemoveEventData} />
           </div>
         ))}

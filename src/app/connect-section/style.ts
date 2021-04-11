@@ -6,8 +6,15 @@ const styles = (theme: Theme) =>
     root: {
       padding: theme.spacing(3),
     },
-    content: {
+    topLine: {
       display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    topLineLeft: {
+      display: 'flex',
+      alignItems: 'center',
+      flex: 1,
     },
     connectBtn: {
       width: 150,

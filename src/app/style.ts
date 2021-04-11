@@ -6,6 +6,9 @@ const styles = (theme: Theme) =>
       minHeight: '100vh',
       backgroundColor: theme.colors.whiteSmoke,
     },
+    title: {
+      flex: 1,
+    },
     contentContainer: {
       marginTop: theme.spacing(2),
     },

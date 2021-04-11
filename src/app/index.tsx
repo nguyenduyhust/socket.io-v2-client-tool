@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
-import Box from '@material-ui/core/Box';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Tabs from '@material-ui/core/Tabs';
+import Switch from '@material-ui/core/Switch';
 import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
-import { useTheme, WithStyles } from '@material-ui/core/styles';
+import { WithStyles } from '@material-ui/core/styles';
 import ConnectSection from './connect-section';
 import ListeningTab from './listening-tab';
 import EmittingTab from './emiting-tab';
@@ -22,7 +22,6 @@ interface Props extends Partial<WithStyles<typeof styles>> {}
 
 const App: React.FC<Props> = (props) => {
   const classes = useStyles(props);
-  const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
   const [socket, setSocket] = useState<SocketIOClient.Socket | undefined>();
   const [socketConnectStatus, setSocketConnectStatus] = React.useState<SocketConnectStatus>(
@@ -60,28 +59,42 @@ const App: React.FC<Props> = (props) => {
       setSocket(undefined);
     }
   }, [socket]);
-  const onEmit = useCallback(
-    (event: string, message: string) => {
-      if (socket) {
-        // socket.send(message);
-        socket.emit(event, message, (response: any) => {
-          console.log('response: ', response);
-        });
-      }
-    },
-    [socket],
-  );
   const [tabSelected, setTabSelected] = useState(0);
   const onTabSelectedChange = useCallback((event, value: number) => {
     setTabSelected(value);
   }, []);
+  const [isEnabledDebug, setIsEnabledDebug] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem('debug')) {
+      setIsEnabledDebug(true);
+    }
+  }, []);
+  const onDebugSwitchChange = useCallback(
+    (event: any, checked: boolean) => {
+      if (checked) {
+        localStorage.setItem('debug', '*');
+      } else {
+        localStorage.removeItem('debug');
+      }
+      location.reload();
+    },
+    [setIsEnabledDebug],
+  );
 
   return (
     <div className={classes.root}>
       <AppBar position="relative" elevation={0}>
         <Container maxWidth="lg">
           <Toolbar>
-            <Typography variant="h6">Socket.io(v2) Client Tool</Typography>
+            <Typography variant="h6" className={classes.title}>
+              Socket.io(v2) Client Tool
+            </Typography>
+            <FormControlLabel
+              control={<Switch color="secondary" checked={isEnabledDebug} />}
+              label="Debug"
+              onChange={onDebugSwitchChange}
+              labelPlacement="start"
+            />
           </Toolbar>
         </Container>
       </AppBar>

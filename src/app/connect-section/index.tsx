@@ -45,50 +45,52 @@ const ConnectSection: React.FC<Props> = (props) => {
 
   return (
     <Paper className={classes.root}>
-      <div className={classes.content}>
-        <TextField
-          label="Server Url"
-          variant="outlined"
-          size="small"
-          defaultValue="ws://localhost:4000"
-          fullWidth
-          onChange={onTextFieldChange}
-          InputProps={{
-            startAdornment: statusIconRender,
-            endAdornment: (
-              <InputAdornment position="end">
-                <Tooltip title="Connect options">
-                  <IconButton size="small">
-                    <SettingsIcon />
-                  </IconButton>
-                </Tooltip>
-              </InputAdornment>
-            ),
-          }}
-        />
-        {(connectStatus === 'disconnected' || connectStatus === 'failed') && (
-          <Button
-            disabled={!url}
-            onClick={onConnectBtnClick}
-            variant="contained"
-            color="primary"
+      <div className={classes.topLine}>
+        <div className={classes.topLineLeft}>
+          <TextField
+            label="Server Url"
+            variant="outlined"
             size="small"
-            className={classes.connectBtn}
-          >
-            Connect
-          </Button>
-        )}
-        {connectStatus === 'connected' && (
-          <Button
-            onClick={onDisconnectBtnClick}
-            variant="contained"
-            color="secondary"
-            size="small"
-            className={classes.connectBtn}
-          >
-            Disconnect
-          </Button>
-        )}
+            defaultValue="ws://localhost:4000"
+            fullWidth
+            onChange={onTextFieldChange}
+            InputProps={{
+              startAdornment: statusIconRender,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Tooltip title="Connect options">
+                    <IconButton size="small">
+                      <SettingsIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              ),
+            }}
+          />
+          {(connectStatus === 'disconnected' || connectStatus === 'failed') && (
+            <Button
+              disabled={!url}
+              onClick={onConnectBtnClick}
+              variant="contained"
+              color="primary"
+              size="small"
+              className={classes.connectBtn}
+            >
+              Connect
+            </Button>
+          )}
+          {connectStatus === 'connected' && (
+            <Button
+              onClick={onDisconnectBtnClick}
+              variant="contained"
+              color="secondary"
+              size="small"
+              className={classes.connectBtn}
+            >
+              Disconnect
+            </Button>
+          )}
+        </div>
       </div>
       {socket && (
         <div className={classes.socketInfo}>
