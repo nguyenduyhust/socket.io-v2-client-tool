@@ -7,28 +7,35 @@ import IconButton from '@material-ui/core/IconButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { WithStyles } from '@material-ui/core/styles';
-import { useStyles, styles } from './style';
 import { InputAdornment } from '@material-ui/core';
 import { SocketConnectStatus } from '..';
+import ConnectOptionsDialog from './connect-options-dialog';
+import { useStyles, styles } from './style';
 
 interface Props extends Partial<WithStyles<typeof styles>> {
   socket?: SocketIOClient.Socket;
   connectStatus: SocketConnectStatus;
   onDisconnect: () => void;
-  onConnect: (url: string) => void;
+  onConnect: (url: string, options?: SocketIOClient.ConnectOpts) => void;
 }
 
 const ConnectSection: React.FC<Props> = (props) => {
   const { connectStatus, onConnect, onDisconnect, socket } = props;
   const [url, setUrl] = useState('');
   const classes = useStyles(props);
-
   const onTextFieldChange = useCallback((event) => {
     setUrl(event.target.value);
   }, []);
+  const [connectOptions, setConnectOptions] = useState<SocketIOClient.ConnectOpts>({
+    path: '/socket.io',
+    secure: false,
+  });
+  const onChangeConnectOptions = useCallback((options: SocketIOClient.ConnectOpts) => {
+    setConnectOptions(options);
+  }, []);
   const onConnectBtnClick = useCallback(() => {
-    onConnect(url);
-  }, [url, onConnect]);
+    onConnect(url, { ...connectOptions });
+  }, [url, onConnect, connectOptions]);
   const onDisconnectBtnClick = useCallback(() => {
     onDisconnect();
   }, [url, onConnect]);
@@ -42,16 +49,30 @@ const ConnectSection: React.FC<Props> = (props) => {
 
     return <FiberManualRecordIcon className={className} />;
   }, [connectStatus]);
+  const [openConnectOptionsDialog, setOpenConnectOptionsDialog] = useState(false);
+  const onOpenConnectOptionsDialog = useCallback(() => {
+    setOpenConnectOptionsDialog(true);
+  }, []);
+  const onCloseConnectOptionsDialog = useCallback(() => {
+    setOpenConnectOptionsDialog(false);
+  }, []);
 
   return (
     <Paper className={classes.root}>
+      <ConnectOptionsDialog
+        options={connectOptions}
+        open={openConnectOptionsDialog}
+        onSubmit={onChangeConnectOptions}
+        onClose={onCloseConnectOptionsDialog}
+      />
       <div className={classes.topLine}>
         <div className={classes.topLineLeft}>
           <TextField
+            disabled={connectStatus === 'connected'}
             label="Server Url"
             variant="outlined"
             size="small"
-            defaultValue="ws://localhost:4000"
+            placeholder="ws://"
             fullWidth
             onChange={onTextFieldChange}
             InputProps={{
@@ -59,7 +80,11 @@ const ConnectSection: React.FC<Props> = (props) => {
               endAdornment: (
                 <InputAdornment position="end">
                   <Tooltip title="Connect options">
-                    <IconButton size="small">
+                    <IconButton
+                      disabled={connectStatus === 'connected'}
+                      onClick={onOpenConnectOptionsDialog}
+                      size="small"
+                    >
                       <SettingsIcon />
                     </IconButton>
                   </Tooltip>
@@ -67,7 +92,7 @@ const ConnectSection: React.FC<Props> = (props) => {
               ),
             }}
           />
-          {(connectStatus === 'disconnected' || connectStatus === 'failed') && (
+          {connectStatus === 'disconnected' && (
             <Button
               disabled={!url}
               onClick={onConnectBtnClick}
@@ -79,7 +104,7 @@ const ConnectSection: React.FC<Props> = (props) => {
               Connect
             </Button>
           )}
-          {connectStatus === 'connected' && (
+          {(connectStatus === 'connected' || connectStatus === 'failed') && (
             <Button
               onClick={onDisconnectBtnClick}
               variant="contained"

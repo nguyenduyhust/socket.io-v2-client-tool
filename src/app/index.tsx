@@ -41,14 +41,11 @@ const App: React.FC<Props> = (props) => {
         setSocketConnectStatus('failed');
         enqueueSnackbar('Socket connect failed', { variant: 'error' });
       });
-      socket.on('welcome', (response: string) => {
-        console.log(response);
-      });
     }
   }, [socket]);
   const onSocketConnect = useCallback(
-    (uri: string) => {
-      const newSocket = SocketIOClient(uri);
+    (uri: string, options?: SocketIOClient.ConnectOpts) => {
+      const newSocket = SocketIOClient(uri, options);
       setSocket(newSocket);
     },
     [socket],
@@ -56,6 +53,7 @@ const App: React.FC<Props> = (props) => {
   const onSocketDisconnect = useCallback(() => {
     if (socket) {
       socket.disconnect();
+      setSocketConnectStatus('disconnected');
       setSocket(undefined);
     }
   }, [socket]);
