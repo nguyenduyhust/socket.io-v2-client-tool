@@ -86,13 +86,19 @@ const ConnectSection: React.FC<Props> = (props) => {
       socket.on('connect', () => {
         setConnectStatusEventData({
           ...connectStatusEventData,
-          events: [{ message: 'Connected', date: new Date() }, ...connectStatusEventData.events],
+          events: [
+            { message: 'Connected', date: new Date() },
+            ...connectStatusEventData.events,
+          ].slice(0, 50),
         });
       });
       socket.on('disconnect', () => {
         setConnectStatusEventData({
           ...connectStatusEventData,
-          events: [{ message: 'Disconnected', date: new Date() }, ...connectStatusEventData.events],
+          events: [
+            { message: 'Disconnected', date: new Date() },
+            ...connectStatusEventData.events,
+          ].slice(0, 50),
         });
       });
       socket.on('connect_error', (error: any) => {
@@ -101,7 +107,7 @@ const ConnectSection: React.FC<Props> = (props) => {
           events: [
             { message: 'Connect failed', date: new Date() },
             ...connectStatusEventData.events,
-          ],
+          ].slice(0, 50),
         });
       });
     }

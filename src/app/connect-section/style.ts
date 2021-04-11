@@ -41,6 +41,7 @@ const styles = (theme: Theme) =>
     },
     socketInfoValue: {
       verticalAlign: 'top',
+      wordBreak: 'break-all',
     },
   });
 
