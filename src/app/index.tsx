@@ -35,7 +35,7 @@ const App: React.FC<Props> = (props) => {
       });
       socket.on('disconnect', () => {
         setSocketConnectStatus('disconnected');
-        enqueueSnackbar('Socket disconnected', { variant: 'success' });
+        enqueueSnackbar('Socket disconnected', { variant: 'error' });
       });
       socket.on('connect_error', (error: any) => {
         setSocketConnectStatus('failed');
