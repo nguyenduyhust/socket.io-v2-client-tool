@@ -45,6 +45,9 @@ const App: React.FC<Props> = (props) => {
   }, [socket]);
   const onSocketConnect = useCallback(
     (uri: string, options?: SocketIOClient.ConnectOpts) => {
+      if (socket) {
+        socket.disconnect();
+      }
       const newSocket = SocketIOClient(uri, options);
       setSocket(newSocket);
     },

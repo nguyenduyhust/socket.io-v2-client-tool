@@ -51,8 +51,8 @@ const ListeningItem: React.FC<Props> = (props) => {
       </div>
       <Collapse in={isExpanded}>
         <div className={classes.content}>
-          {eventData.events.map((event) => (
-            <div className={classes.event}>
+          {eventData.events.map((event, index) => (
+            <div key={index} className={classes.event}>
               <div className={classes.eventDate}>
                 {moment(event.date).format('DD/MM/YYYY HH:mm')}:
               </div>
