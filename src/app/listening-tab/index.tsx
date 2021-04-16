@@ -105,7 +105,7 @@ const ConnectSection: React.FC<Props> = (props) => {
         setConnectStatusEventData({
           ...connectStatusEventData,
           events: [
-            { message: 'Connect failed', date: new Date() },
+            { message: 'Connect failed: ' + error, date: new Date() },
             ...connectStatusEventData.events,
           ].slice(0, 50),
         });

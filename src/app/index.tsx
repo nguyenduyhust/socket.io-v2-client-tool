@@ -39,7 +39,7 @@ const App: React.FC<Props> = (props) => {
       });
       socket.on('connect_error', (error: any) => {
         setSocketConnectStatus('failed');
-        enqueueSnackbar('Socket connect failed', { variant: 'error' });
+        enqueueSnackbar('Socket connect failed' + error, { variant: 'error' });
       });
     }
   }, [socket]);

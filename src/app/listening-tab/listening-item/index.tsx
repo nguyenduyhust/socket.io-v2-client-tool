@@ -56,7 +56,7 @@ const ListeningItem: React.FC<Props> = (props) => {
               <div className={classes.eventDate}>
                 {moment(event.date).format('DD/MM/YYYY HH:mm')}:
               </div>
-              <div className={classes.eventMessage}>{event.message}</div>
+              <div className={classes.eventMessage}>{JSON.stringify(event.message)}</div>
             </div>
           ))}
         </div>

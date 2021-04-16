@@ -29,6 +29,9 @@ const ConnectSection: React.FC<Props> = (props) => {
   const [connectOptions, setConnectOptions] = useState<SocketIOClient.ConnectOpts>({
     path: '/socket.io',
     secure: false,
+    query: {
+      token: 'Bearer xxxxxxxxxx',
+    },
   });
   const onChangeConnectOptions = useCallback((options: SocketIOClient.ConnectOpts) => {
     setConnectOptions(options);
